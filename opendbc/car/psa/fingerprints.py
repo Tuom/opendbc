@@ -25,4 +25,9 @@ FW_VERSIONS = {
       b'085044414569231210',
     ],
   },
+  CAR.PSA_CITROEN_BERLINGO: {
+    (Ecu.eps, 0x6b5, None): [
+      b'0011752964908       ',
+    ],
+  },
 }

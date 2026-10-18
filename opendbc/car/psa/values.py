@@ -42,6 +42,10 @@ class CAR(Platforms):
     [PSACarDocs("Peugeot 508 2019-23")],
     CarSpecs(mass=1720, wheelbase=2.79, steerRatio=17.6),
   )
+  PSA_CITROEN_BERLINGO = PSAPlatformConfig(
+    [PSACarDocs("Citroen Berlingo 2024-25", package="Cruise Control & Lane Assist")],
+    CarSpecs(mass=1471, wheelbase=2.785, steerRatio=17.6),
+  )
 
 
 PSA_DIAG_REQ  = bytes([uds.SERVICE_TYPE.DIAGNOSTIC_SESSION_CONTROL, 0x01])
