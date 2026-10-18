@@ -27,6 +27,7 @@ non_tested_cars = [
   VOLKSWAGEN.VOLKSWAGEN_CRAFTER_MK2,  # need a route from an ACC-equipped Crafter
   SUBARU.SUBARU_FORESTER_HYBRID,
   VOLKSWAGEN.PORSCHE_MACAN_MK1,
+  PSA.PSA_CITROEN_BERLINGO,  # no public test route yet
   HONDA.ACURA_TLX_2G,
 
   # These had their DSUs unplugged, need new routes
