@@ -426,6 +426,17 @@
     ],
     "package": "Adaptive Cruise Control (ACC)"
   },
+  "Citroen Berlingo 2024-25": {
+    "platform": "PSA_CITROEN_BERLINGO",
+    "make": "Citroen",
+    "brand": "psa",
+    "model": "Berlingo",
+    "year": [
+      "2024",
+      "2025"
+    ],
+    "package": "Cruise Control & Lane Assist"
+  },
   "comma body": {
     "platform": "COMMA_BODY",
     "make": "comma",
