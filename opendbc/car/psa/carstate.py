@@ -24,7 +24,7 @@ class CarState(CarStateBase):
       cp.vl['Dyn4_FRE']['P266_VehV_VPsvValWhlBckR'],
     )
     ret.yawRate = cp_adas.vl['HS2_DYN_UCF_MDD_32D']['VITESSE_LACET_BRUTE'] * CV.DEG_TO_RAD
-    ret.standstill = bool(cp_adas.vl['HS2_DYN_UCF_MDD_32D']['VEHICLE_STANDSTILL'])
+    ret.standstill = ret.vEgoRaw < 0.01  # VEHICLE_STANDSTILL in HS2_DYN_UCF_MDD_32D is never set on CC-only cars
 
     # gas
     ret.gasPressed = cp_cam.vl['DRIVER']['GAS_PEDAL'] > 0
