@@ -27,7 +27,7 @@ class CarState(CarStateBase):
     ret.standstill = ret.vEgoRaw < 0.01  # VEHICLE_STANDSTILL in HS2_DYN_UCF_MDD_32D is never set on CC-only cars
 
     # gas
-    ret.gasPressed = cp_cam.vl['DRIVER']['GAS_PEDAL'] > 0
+    ret.gasPressed = cp.vl['Dyn_CMM']['P002_Com_rAPP'] > 0
 
     # brake
     ret.brakePressed = bool(cp_cam.vl['Dat_BSI']['P013_MainBrake'])
