@@ -27,7 +27,7 @@ class CarState(CarStateBase):
     ret.standstill = bool(cp_adas.vl['HS2_DYN_UCF_MDD_32D']['VEHICLE_STANDSTILL'])
 
     # gas
-    ret.gasPressed = cp.vl['Dyn_CMM']['P002_Com_rAPP'] > 0
+    ret.gasPressed = cp_cam.vl['DRIVER']['GAS_PEDAL'] > 0
 
     # brake
     ret.brakePressed = bool(cp_cam.vl['Dat_BSI']['P013_MainBrake'])
@@ -35,7 +35,7 @@ class CarState(CarStateBase):
 
     # steering wheel
     ret.steeringAngleDeg = cp.vl['STEERING_ALT']['ANGLE'] # EPS
-    ret.steeringRateDeg = cp.vl['STEERING_ALT']['RATE'] * (2 * cp.vl['STEERING_ALT']['RATE_SIGN'] - 1) # convert [0,1] to [-1,1] EPS: rot. speed * rot. sign
+    ret.steeringRateDeg  = cp.vl['STEERING_ALT']['RATE'] * (1 - 2 * cp.vl['STEERING_ALT']['RATE_SIGN']) # convert [0,1] to [1,-1] EPS: rot. speed * rot. sign
     ret.steeringTorque = cp.vl['STEERING']['DRIVER_TORQUE']
     ret.steeringTorqueEps = cp.vl['IS_DAT_DIRA']['EPS_TORQUE']
     ret.steeringPressed = self.update_steering_pressed(abs(ret.steeringTorque) > CarControllerParams.STEER_DRIVER_ALLOWANCE, 5)
@@ -44,10 +44,10 @@ class CarState(CarStateBase):
     # cruise
     ret.cruiseState.speed = cp_adas.vl['HS2_DAT_MDD_CMD_452']['SPEED_SETPOINT'] * CV.KPH_TO_MS # set to 255 when ACC is off, -2 kph offset from dash speed
     ret.cruiseState.enabled = cp_adas.vl['HS2_DAT_MDD_CMD_452']['RVV_ACC_ACTIVATION_REQ'] == 1
-    ret.cruiseState.available = cp_adas.vl['HS2_DYN1_MDD_ETAT_2B6']['ACC_STATUS'] > 2
-    ret.cruiseState.nonAdaptive = cp_adas.vl['HS2_DAT_MDD_CMD_452']['LONGITUDINAL_REGULATION_TYPE'] != 3 # 0: None, 1: CC, 2: Limiter, 3: ACC
-    ret.cruiseState.standstill = bool(cp_adas.vl['HS2_DYN_UCF_MDD_32D']['VEHICLE_STANDSTILL'])
-    ret.accFaulted = cp_adas.vl['HS2_DYN_UCF_MDD_32D']['ACC_ETAT_DECEL_OR_ESP_STATUS'] == 3 # 0: Inhibited, 1: Waiting, 2: Active, 3: Fault
+    ret.cruiseState.available = True # not available for CC-only
+    ret.cruiseState.nonAdaptive = False # not available for CC-only
+    ret.cruiseState.standstill = False # not available for CC-only
+    ret.accFaulted = cp_adas.vl['HS2_DYN_UCF_MDD_32D']['ACC_ETAT_DECEL_OR_ESP_STATUS'] == 3
 
     # gear
     if bool(cp_cam.vl['Dat_BSI']['P103_Com_bRevGear']):

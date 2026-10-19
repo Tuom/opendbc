@@ -52,8 +52,10 @@ class TestPsaSafetyBase(common.CarSafetyTest, common.AngleSteeringSafetyTest):
     return self.packer.make_can_msg_safety("Dat_BSI", self.CAM_BUS, values)
 
   def _user_gas_msg(self, gas):
-    values = {"P002_Com_rAPP": int(gas * 100)}
-    return self.packer.make_can_msg_safety("Dyn_CMM", self.MAIN_BUS, values)
+    values = {"GAS_PEDAL": int(gas * 100)}
+    # DBC defines DRIVER as 6 bytes, but the car sends 8
+    addr, dat, bus = self.packer.make_can_msg("DRIVER", self.CAM_BUS, values)
+    return libsafety_py.make_CANPacket(addr, bus, dat.ljust(8, b'\x00'))
 
   def test_rx_hook(self):
     # speed
