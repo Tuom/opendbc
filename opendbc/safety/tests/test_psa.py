@@ -113,7 +113,6 @@ class TestPsaStockSafety(TestPsaSafetyBase):
     self.safety.init_tests()
 
 
-
 class TestPsaIgnition(unittest.TestCase):
   TX_MSGS: list = []
 

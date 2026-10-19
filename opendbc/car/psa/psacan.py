@@ -16,4 +16,3 @@ def create_lka_steering(packer, lat_active: bool, apply_angle: float, status: in
   }
 
   return packer.make_can_msg('LANE_KEEP_ASSIST', 0, values)
-
