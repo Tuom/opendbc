@@ -465,6 +465,17 @@
     ],
     "package": "Adaptive Cruise Control (ACC)"
   },
+  "Citroen Berlingo 2024-25": {
+    "platform": "PSA_CITROEN_BERLINGO",
+    "make": "Citroen",
+    "brand": "psa",
+    "model": "Berlingo",
+    "year": [
+      "2024",
+      "2025"
+    ],
+    "package": "Cruise Control & Lane Assist"
+  },
   "comma body": {
     "platform": "COMMA_BODY",
     "make": "comma",
@@ -2859,6 +2870,22 @@
       "2017"
     ],
     "package": "ProPILOT Assist"
+  },
+  "Peugeot 208 2019-25": {
+    "platform": "PSA_PEUGEOT_208",
+    "make": "Peugeot",
+    "brand": "psa",
+    "model": "208",
+    "year": [
+      "2019",
+      "2020",
+      "2021",
+      "2022",
+      "2023",
+      "2024",
+      "2025"
+    ],
+    "package": "Adaptive Cruise Control (ACC) & Lane Assist"
   },
   "Porsche Macan 2017-24": {
     "platform": "PORSCHE_MACAN_MK1",
