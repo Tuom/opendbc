@@ -40,12 +40,35 @@ class TestPsaSafetyBase(common.CarSafetyTest, common.AngleSteeringSafetyTest):
     return self.packer.make_can_msg_safety("STEERING_ALT", self.MAIN_BUS, values)
 
   def _pcm_status_msg(self, enable):
-    values = {"RVV_ACC_ACTIVATION_REQ": enable}
+    # CC can only be engaged with cruise mode CC selected
+    values = {"RVV_ACC_ACTIVATION_REQ": enable, "LONGITUDINAL_REGULATION_TYPE": 1}
     return self.packer.make_can_msg_safety("HS2_DAT_MDD_CMD_452", self.ADAS_BUS, values)
 
   def _acc_state_msg(self, enabled):
     values = {"LONGITUDINAL_REGULATION_TYPE": 1 if enabled else 0}
     return self.packer.make_can_msg_safety("HS2_DAT_MDD_CMD_452", self.ADAS_BUS, values)
+
+  def _cruise_mode_msg(self, mode):
+    # LONGITUDINAL_REGULATION_TYPE: 0 none, 1 CC, 2 limiter, 3 ACC
+    return self.packer.make_can_msg_safety("HS2_DAT_MDD_CMD_452", self.ADAS_BUS, {"LONGITUDINAL_REGULATION_TYPE": mode})
+
+  def test_acc_main_from_cruise_mode(self):
+    for mode in (0, 1, 2, 3, 1, 0):
+      self._rx(self._cruise_mode_msg(mode))
+      self.assertEqual(mode == 1, self.safety.get_acc_main_on(), mode)
+
+  def test_mads_lateral_follows_cruise_mode(self):
+    self.safety.set_mads_params(True, False, False)
+    self._rx(self._cruise_mode_msg(0))
+    self._rx(self._cruise_mode_msg(1))
+    self.assertTrue(self.safety.get_controls_allowed_lateral())
+    # limiter (LIMIT button) and off (ASSIST button) both end lateral
+    for off_mode in (2, 0):
+      self._rx(self._cruise_mode_msg(1))
+      self.assertTrue(self.safety.get_controls_allowed_lateral())
+      self._rx(self._cruise_mode_msg(off_mode))
+      self.assertFalse(self.safety.get_controls_allowed_lateral(), off_mode)
+      self._rx(self._cruise_mode_msg(0))
 
   def _speed_msg(self, speed):
     values = {"VITESSE_VEHICULE_ROUES": speed * 3.6}
