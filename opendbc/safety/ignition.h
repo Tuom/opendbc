@@ -69,8 +69,9 @@ void ignition_can_hook(const CANPacket_t *msg) {
 
     // PSA exception
     if ((msg->addr == 0x348U) && (len == 8)) {
-      // bit 41: EV running, bit 42: ICE running
-      ignition_can = (msg->data[5] & 0x6U) != 0U;
+      // Dyn2_CMM->P134_Com_stEng: 0 Locked, 1 Cut, 2 Starting, 3 Running, 4 Stopped (stop & start), 5 GO, 6 DegradedGO
+      int engine_state = msg->data[5] & 0xFU;
+      ignition_can = (engine_state >= 2) && (engine_state <= 6);
       ignition_can_cnt = 0U;
     }
   }
