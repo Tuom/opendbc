@@ -92,5 +92,29 @@ class TestPsaStockSafety(TestPsaSafetyBase):
     self.safety.init_tests()
 
 
+
+class TestPsaIgnition(unittest.TestCase):
+  TX_MSGS: list = []
+
+  def setUp(self):
+    self.safety = libsafety_py.libsafety
+    self.safety.init_tests()
+
+  def _msg(self, byte5):
+    return common.make_msg(0, 0x348, dat=b"\x00" * 5 + bytes([byte5]) + b"\x00" * 2)
+
+  # 0x348 byte 5: bit 1 EV running, bit 2 ICE running
+  def test_ignition_on(self):
+    for byte5 in (0x02, 0x04, 0x06):
+      self.safety.ignition_can_hook(self._msg(byte5))
+      self.assertTrue(self.safety.get_ignition_can())
+
+  def test_ignition_off(self):
+    self.safety.ignition_can_hook(self._msg(0x04))
+    self.assertTrue(self.safety.get_ignition_can())
+    self.safety.ignition_can_hook(self._msg(0x00))
+    self.assertFalse(self.safety.get_ignition_can())
+
+
 if __name__ == "__main__":
     unittest.main()

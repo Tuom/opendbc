@@ -66,6 +66,13 @@ void ignition_can_hook(const CANPacket_t *msg) {
       }
       prev_counter_vw_meb = counter;
     }
+
+    // PSA exception
+    if ((msg->addr == 0x348U) && (len == 8)) {
+      // bit 41: EV running, bit 42: ICE running
+      ignition_can = (msg->data[5] & 0x6U) != 0U;
+      ignition_can_cnt = 0U;
+    }
   }
 
   // TODO: this is too loose, Teslas have 0x222
